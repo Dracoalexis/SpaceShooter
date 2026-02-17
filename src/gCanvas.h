@@ -44,6 +44,7 @@ private:
 	void drawMeteors();
 	void drawBullets();
 	void drawHealthBar();
+	void drawDialogues();
 	void generateMeteor();
 	bool checkCollisionX(float firstx, float firstwidth, float secondx, float secondwidth);
 	bool checkCollisionY(float firsty, float firstheight, float secondy, float secondheight);
@@ -69,6 +70,10 @@ private:
 		NONE, EAST, NORTH, WEST, SOUTH
 	};
 
+	enum {
+		GAMESTATE_LOAD, GAMESTATE_PLAY, GAMESTATE_GAMEOVER
+	};
+
 	gApp* root;
 	gImage spaceship;
 	gImage meteor1;
@@ -77,10 +82,16 @@ private:
 	gImage bulletImage;
 	gImage healthbar;
 	gImage healthbarborder;
+	gImage mainmenubbg;
+	gImage retrybbg;
 	gFont meteorcountGUIfont;
 	gFont meteorscountfont;
+	gFont gameoverfont;
+	gFont retrybuttonfont;
+	gFont mainmenubuttonfont;
 	float ssspeed, ssspeedx, ssspeedy;
 	float sssubspeed, sssubspeedx, sssubspeedy;
+	int gamestate;
 	int ssx, ssy;
 	int ssw, ssh;
 	int hbx, hby;
@@ -89,10 +100,13 @@ private:
 	int meteor1health;
 	int meteor2health;
 	int meteortotalcount;
+	int gox, goy;
+	int retrybbgx, retrybbgy, retrybbgw, retrybbgh;
 	float meteor1speed;
 	float meteor2speed;
 	float bulletspeed;
 	float ssangle;
+	bool dialogueshown;
 	bool wpressed;
 	bool apressed;
 	bool spressed;

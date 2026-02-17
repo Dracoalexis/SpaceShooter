@@ -16,16 +16,25 @@ gCanvas::~gCanvas() {
 }
 
 void gCanvas::setup() {
+	gamestate = GAMESTATE_PLAY;
+	dialogueshown = false;
+	meteorcountGUIfont.loadFont("led_counter-7.ttf", 18);
+	meteorscountfont.loadFont("FreeSansBold.ttf", 15);
+	gameoverfont.loadFont("space age.ttf", 48);
+	mainmenubuttonfont.loadFont("space age.ttf", 18);
+	retrybuttonfont.loadFont("space age.ttf", 18);
 	space.loadImage("SpaceShooter_Space.png");
 	spaceship.loadImage("SpaceShooter_SpaceShip1.png");
 	meteor1.loadImage("SpaceShooter_Meteor1.png");
 	meteor2.loadImage("SpaceShooter_Meteor2.png");
-	meteorcountGUIfont.loadFont("led_counter-7.ttf", 24);
-	meteorscountfont.loadFont("FreeSansBold.ttf", 15);
 	bulletImage.loadImage("SpaceShooter_Bullet.png");
 	healthbar.loadImage("SpaceShooter_HealthBar.png");
 	healthbarborder.loadImage("SpaceShooter_HealthBarBorder.png");
+	mainmenubbg.loadImage("SpaceShooter_ButtonBackGround3.png");
+	retrybbg.loadImage("SpaceShooter_ButtonBackGround3.png");
 	sshealth = 10;
+	gox = (getWidth() - gameoverfont.getStringWidth("GAME OVER")) / 2;
+	goy = getHeight() / 2;
 	ssw = spaceship.getWidth();
 	ssh = spaceship.getHeight();
 	ssx = (getWidth() - ssw) / 2;
@@ -36,6 +45,10 @@ void gCanvas::setup() {
 	hbh = healthbar.getHeight();
 	hbbx = hbx;
 	hbby = hby;
+	retrybbgx = gox + 290;
+	retrybbgy = goy + 30;
+	retrybbgw = retrybbg.getWidth();
+	retrybbgh = retrybbg.getHeight();
 	ssangle = 0.0f;
 	wpressed = false;
 	apressed = false;
@@ -58,16 +71,21 @@ void gCanvas::setup() {
 }
 
 void gCanvas::update() {
+	if(dialogueshown) return;
+	sshealth = 0;
 	moveSpaceShip();
 	moveMeteors();
 	moveBullets();
 }
 void gCanvas::draw() {
 	drawSpace();
-	drawSpaceShip();
+	if(!dialogueshown) {
+		drawSpaceShip();
+		drawBullets();
+	}
 	drawMeteors();
-	drawBullets();
 	drawHealthBar();
+	drawDialogues();
 }
 
 void gCanvas::generateMeteor() {
@@ -226,6 +244,8 @@ void gCanvas::moveMeteors() {
         	sshealth -= 1;
         	if(sshealth <= 0) {
         		sshealth = 0;
+        		gamestate = GAMESTATE_GAMEOVER;
+        		dialogueshown = true;
         	}
         }
 
@@ -336,6 +356,16 @@ void gCanvas::drawHealthBar() {
 	healthbar.drawSub(hbx, hby, hbw * sshealth / 10, hbh, hbw - (hbw * sshealth / 10), 0, hbw, hbh);
 	healthbarborder.draw(hbbx, hbby);
 }
+void gCanvas::drawDialogues() {
+	if(!dialogueshown) return;
+	if(gamestate == GAMESTATE_GAMEOVER) {
+		gameoverfont.drawText("GAME OVER", gox, goy);
+		mainmenubbg.draw(gox, goy + 30);
+		retrybbg.draw(retrybbgx, retrybbgy);
+		mainmenubuttonfont.drawText("Main Menu", gox + 17, goy + 47);
+		retrybuttonfont.drawText("Retry", gox + 335, goy + 47);
+	}
+}
 void gCanvas::keyPressed(int key) {
 //	gLogi("gCanvas") << "keyPressed:" << key;
 	if(key == G_KEY_W || key == G_KEY_UP) {
@@ -388,6 +418,12 @@ void gCanvas::mousePressed(int x, int y, int button) {
 }
 
 void gCanvas::mouseReleased(int x, int y, int button) {
+	if(dialogueshown) {
+		if(x >= retrybbgx && x <= retrybbgx + retrybbgw && y >= retrybbgy && y <= retrybbgy + retrybbgh) {
+			gCanvas* cnv = new gCanvas(root);
+			root->setCurrentCanvas(cnv);
+		}
+	}
 	float bx = ssx + (ssw / 2);
 	float by = ssy + (ssh / 2);
 	float br = ssangle;
