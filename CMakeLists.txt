@@ -109,11 +109,13 @@ set(GlistApp_SOURCES
 		${APP_DIR}/src/main.cpp
 		${APP_DIR}/src/gApp.cpp
 		${APP_DIR}/src/gCanvas.cpp
+		${APP_DIR}/src/MenuCanvas.cpp
 )
 
 set(GlistApp_HEADERS
 		${APP_DIR}/src/gApp.h
 		${APP_DIR}/src/gCanvas.h
+		${APP_DIR}/src/MenuCanvas.h
 )
 
 add_executable(${APP_NAME}
