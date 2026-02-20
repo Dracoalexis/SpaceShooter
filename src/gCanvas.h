@@ -11,6 +11,7 @@
 #include "gBaseCanvas.h"
 #include "gApp.h"
 #include "gImage.h"
+#include "MenuCanvas.h"
 
 class gCanvas : public gBaseCanvas {
 public:
@@ -89,9 +90,11 @@ private:
 	gFont gameoverfont;
 	gFont retrybuttonfont;
 	gFont mainmenubuttonfont;
+	gFont scorefont;
 	float ssspeed, ssspeedx, ssspeedy;
 	float sssubspeed, sssubspeedx, sssubspeedy;
 	int gamestate;
+	int score;
 	int ssx, ssy;
 	int ssw, ssh;
 	int hbx, hby;
@@ -102,6 +105,7 @@ private:
 	int meteortotalcount;
 	int gox, goy;
 	int retrybbgx, retrybbgy, retrybbgw, retrybbgh;
+	int mainmenubbgx, mainmenubbgy, mainmenubbgw, mainmenubbgh;
 	float meteor1speed;
 	float meteor2speed;
 	float bulletspeed;
@@ -111,6 +115,7 @@ private:
 	bool apressed;
 	bool spressed;
 	bool dpressed;
+	bool isplayerwin;
 	direction dir;
 };
 

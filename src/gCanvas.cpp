@@ -18,11 +18,12 @@ gCanvas::~gCanvas() {
 void gCanvas::setup() {
 	gamestate = GAMESTATE_PLAY;
 	dialogueshown = false;
-	meteorcountGUIfont.loadFont("led_counter-7.ttf", 18);
-	meteorscountfont.loadFont("FreeSansBold.ttf", 15);
-	gameoverfont.loadFont("space age.ttf", 48);
+	meteorcountGUIfont.loadFont("space age.ttf", 18);
+	meteorscountfont.loadFont("dogicapixel.ttf", 12);
+	gameoverfont.loadFont("SPACE.ttf", 48);
 	mainmenubuttonfont.loadFont("space age.ttf", 18);
 	retrybuttonfont.loadFont("space age.ttf", 18);
+	scorefont.loadFont("space age.ttf", 18);
 	space.loadImage("SpaceShooter_Space.png");
 	spaceship.loadImage("SpaceShooter_SpaceShip1.png");
 	meteor1.loadImage("SpaceShooter_Meteor1.png");
@@ -33,6 +34,7 @@ void gCanvas::setup() {
 	mainmenubbg.loadImage("SpaceShooter_ButtonBackGround3.png");
 	retrybbg.loadImage("SpaceShooter_ButtonBackGround3.png");
 	sshealth = 10;
+	score = 0;
 	gox = (getWidth() - gameoverfont.getStringWidth("GAME OVER")) / 2;
 	goy = getHeight() / 2;
 	ssw = spaceship.getWidth();
@@ -45,15 +47,20 @@ void gCanvas::setup() {
 	hbh = healthbar.getHeight();
 	hbbx = hbx;
 	hbby = hby;
-	retrybbgx = gox + 290;
-	retrybbgy = goy + 30;
+	retrybbgx = gox + 320;
+	retrybbgy = goy + 40;
 	retrybbgw = retrybbg.getWidth();
 	retrybbgh = retrybbg.getHeight();
+	mainmenubbgx = gox;
+	mainmenubbgy = goy + 40;
+	mainmenubbgw = mainmenubbg.getWidth();
+	mainmenubbgh = mainmenubbg.getHeight();
 	ssangle = 0.0f;
 	wpressed = false;
 	apressed = false;
 	dpressed = false;
 	spressed = false;
+	isplayerwin = false;
 	sssubspeed = 1.0f;
 	ssspeed = 2.3f;
 	ssspeedx = 0.0f;
@@ -62,7 +69,7 @@ void gCanvas::setup() {
 	meteor2speed = 4.5f;
 	meteor1health = 2;
 	meteor2health = 6;
-	bulletspeed = 30.0f;
+	bulletspeed = 35.0f;
 	dir = NONE;
 	for(int i = 0; i < meteorcount; i++) {
 		generateMeteor();
@@ -72,7 +79,6 @@ void gCanvas::setup() {
 
 void gCanvas::update() {
 	if(dialogueshown) return;
-	sshealth = 0;
 	moveSpaceShip();
 	moveMeteors();
 	moveBullets();
@@ -321,6 +327,13 @@ void gCanvas::moveBullets() {
 				if(j.meteorhealth <= 0) {
 					meteors.erase(meteors.begin() + mi);
 					meteortotalcount -= 1;
+					if(meteortotalcount <= 0) {
+		        		gamestate = GAMESTATE_GAMEOVER;
+		        		dialogueshown = true;
+		        		isplayerwin = true;
+					}
+					if(j.meteorscale == 1) score += 10;
+					if(j.meteorscale == 2) score += 20;
 				}
 				continue;
 			}
@@ -334,17 +347,22 @@ void gCanvas::drawSpaceShip() {
 	spaceship.draw(ssx, ssy, ssw, ssh, ssw / 2, ssh / 2, ssangle);
 }
 void gCanvas::drawMeteors() {
-	meteorcountGUIfont.drawText("Meteor Count: " + gToStr(meteortotalcount), 20, getHeight() - 20);
     for(const meteor& i : meteors) {
     	if(i.meteorscale == 1) {
     		meteor1.draw(i.meteorx, i.meteory);
+    		setColor(0, 0, 255);
     		meteorscountfont.drawText(gToStr(i.meteorhealth), i.meteorx, i.meteory);
+    		setColor(255, 255, 255);
     	}
     	if(i.meteorscale == 2) {
     		meteor2.draw(i.meteorx, i.meteory);
+    		setColor(255, 0, 0);
     		meteorscountfont.drawText(gToStr(i.meteorhealth), i.meteorx, i.meteory);
+    		setColor(255, 255, 255);
     	}
     }
+    setColor(150, 150, 150);
+	meteorcountGUIfont.drawText("Meteor Count: " + gToStr(meteortotalcount), 20, getHeight() - 20);
 }
 void gCanvas::drawBullets() {
 	for(int i = 0; i < bullets.size(); i++) {
@@ -359,11 +377,20 @@ void gCanvas::drawHealthBar() {
 void gCanvas::drawDialogues() {
 	if(!dialogueshown) return;
 	if(gamestate == GAMESTATE_GAMEOVER) {
-		gameoverfont.drawText("GAME OVER", gox, goy);
-		mainmenubbg.draw(gox, goy + 30);
+		if(isplayerwin) {
+			setColor(0, 200, 0);
+			gameoverfont.drawText("YOU WIN", gox + 60, goy - 10);
+		}
+		else {
+			setColor(200, 0, 0);
+			gameoverfont.drawText("GAME OVER", gox - 20, goy - 10);
+		}
+		setColor(150, 150, 150);
+		scorefont.drawText("Score: " + gToStr(score), gox + 180, goy + 20);
+		mainmenubbg.draw(mainmenubbgx, mainmenubbgy);
 		retrybbg.draw(retrybbgx, retrybbgy);
-		mainmenubuttonfont.drawText("Main Menu", gox + 17, goy + 47);
-		retrybuttonfont.drawText("Retry", gox + 335, goy + 47);
+		mainmenubuttonfont.drawText("Main Menu", mainmenubbgx + 17, mainmenubbgy + 17);
+		retrybuttonfont.drawText("Retry", gox + 365, goy + 57);
 	}
 }
 void gCanvas::keyPressed(int key) {
@@ -421,6 +448,10 @@ void gCanvas::mouseReleased(int x, int y, int button) {
 	if(dialogueshown) {
 		if(x >= retrybbgx && x <= retrybbgx + retrybbgw && y >= retrybbgy && y <= retrybbgy + retrybbgh) {
 			gCanvas* cnv = new gCanvas(root);
+			root->setCurrentCanvas(cnv);
+		}
+		if(x >= mainmenubbgx && x <= mainmenubbgx + mainmenubbgw && y >= mainmenubbgy && y <= mainmenubbgy + mainmenubbgh) {
+			MenuCanvas* cnv = new MenuCanvas(root);
 			root->setCurrentCanvas(cnv);
 		}
 	}

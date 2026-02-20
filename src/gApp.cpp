@@ -19,7 +19,7 @@ gApp::~gApp() {
 }
 
 void gApp::setup() {
-	gCanvas* cnv = new gCanvas(this);
+	MenuCanvas* cnv = new MenuCanvas(this);
 	appmanager->setCurrentCanvas(cnv);
 }
 
