@@ -65,7 +65,7 @@ private:
 	std::vector<meteor>meteors;
 	std::vector<std::vector<float>>bullets;
 
-	static const int meteorcount = 1;
+	static const int meteorcount = 15;
 
 	enum direction
 	{
