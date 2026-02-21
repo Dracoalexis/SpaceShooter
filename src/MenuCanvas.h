@@ -10,6 +10,7 @@
 
 #include "gBaseCanvas.h"
 #include "gApp.h"
+#include "gFmodSound.h"
 
 class MenuCanvas: public gBaseCanvas {
 public:
@@ -38,6 +39,7 @@ private:
 	gImage background;
 	gFont titlefont;
 	gFont startfont;
+	gFmodSound mainmenumusic;
 	int tfx, tfy;
 	int sfx, sfy;
 };

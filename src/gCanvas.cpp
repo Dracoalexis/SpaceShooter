@@ -33,6 +33,12 @@ void gCanvas::setup() {
 	healthbarborder.loadImage("SpaceShooter_HealthBarBorder.png");
 	mainmenubbg.loadImage("SpaceShooter_ButtonBackGround3.png");
 	retrybbg.loadImage("SpaceShooter_ButtonBackGround3.png");
+	battlemusic.loadSound("battle.mp3");
+	winmusic.loadSound("wictory.mp3");
+	shootsoundeffect.loadSound("shoot.mp3");
+	meteorhitsoundeffect.loadSound("meteorhit.mp3");
+	battlemusic.setVolume(0.2f);
+	battlemusic.play();
 	sshealth = 10;
 	score = 0;
 	gox = (getWidth() - gameoverfont.getStringWidth("GAME OVER")) / 2;
@@ -252,6 +258,7 @@ void gCanvas::moveMeteors() {
         		sshealth = 0;
         		gamestate = GAMESTATE_GAMEOVER;
         		dialogueshown = true;
+        		battlemusic.stop();
         	}
         }
 
@@ -324,6 +331,7 @@ void gCanvas::moveBullets() {
 					bullets[i][1] >= j.meteory && bullets[i][1] <= j.meteory + meteorh) {
 				bullets.erase(bullets.begin() + i);
 				j.meteorhealth -= 1;
+				meteorhitsoundeffect.play();
 				if(j.meteorhealth <= 0) {
 					meteors.erase(meteors.begin() + mi);
 					meteortotalcount -= 1;
@@ -331,6 +339,7 @@ void gCanvas::moveBullets() {
 		        		gamestate = GAMESTATE_GAMEOVER;
 		        		dialogueshown = true;
 		        		isplayerwin = true;
+		        		battlemusic.stop();
 					}
 					if(j.meteorscale == 1) score += 10;
 					if(j.meteorscale == 2) score += 20;
@@ -462,6 +471,9 @@ void gCanvas::mouseReleased(int x, int y, int button) {
 	float bdy = -std::cos(gDegToRad(br)) * bulletspeed;
 	int bs = 0;
 	generateBullet(bx, by, bdx, bdy, br, bs);
+	if(gamestate == GAMESTATE_PLAY) {
+		shootsoundeffect.play();
+	}
 }
 
 void gCanvas::mouseScrolled(int x, int y) {

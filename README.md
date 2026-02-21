@@ -1,4 +1,23 @@
-<img width="1274" height="715" alt="Ekran görüntüsü 2026-02-20 185358" src="https://github.com/user-attachments/assets/7bcf2602-25fb-4657-a8ce-79269bf50f8d" />
-<img width="1271" height="713" alt="Ekran görüntüsü 2026-02-20 185704" src="https://github.com/user-attachments/assets/bc44f841-76bc-40d5-9bf6-1db0da9b1e11" />
-<img width="1277" height="713" alt="Ekran görüntüsü 2026-02-20 185720" src="https://github.com/user-attachments/assets/8c1e928e-36af-40ab-96e6-df4df7b10ac4" />
-<img width="1272" height="713" alt="Ekran görüntüsü 2026-02-20 185830" src="https://github.com/user-attachments/assets/d0c1a052-aa8d-458d-b632-06d45e94106e" />
+# GlistApp
+
+App project template for [GlistEngine](https://github.com/GlistEngine/GlistEngine)
+
+Developers can clone this repository to initialize a new GlistEngine game project. More information can be found on the [readme](https://github.com/GlistEngine/GlistEngine/blob/main/README.md) page of GlistEngine repository.
+
+Please clone this repo under glist/myglistapps in your GlistEngine installation directory.
+
+<u>_For MacOS (XCode)_</u>:
+
+- If you do not have Xcode, download and install before continuing the guide.
+
+- After cloning into the right directory, navigate to `~/dev/glist/myglistapps/GlistApp/_macos` from your terminal.
+
+- From here, run command:
+
+  `sh generate_glistapp_xcode.sh macos`
+  
+  The IOS specific instructions can be found in gipIOS plugin. 
+
+- When Xcode opens the project, click on ALL_BUILD where it says `ALL_BUILD > My Mac` at the top center of the Xcode screen and select `GlistApp`.
+
+- Click on the run button at the top-left of the screen.

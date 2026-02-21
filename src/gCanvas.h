@@ -12,6 +12,7 @@
 #include "gApp.h"
 #include "gImage.h"
 #include "MenuCanvas.h"
+#include "gFmodSound.h"
 
 class gCanvas : public gBaseCanvas {
 public:
@@ -64,7 +65,7 @@ private:
 	std::vector<meteor>meteors;
 	std::vector<std::vector<float>>bullets;
 
-	static const int meteorcount = 15;
+	static const int meteorcount = 1;
 
 	enum direction
 	{
@@ -91,6 +92,10 @@ private:
 	gFont retrybuttonfont;
 	gFont mainmenubuttonfont;
 	gFont scorefont;
+	gFmodSound battlemusic;
+	gFmodSound winmusic;
+	gFmodSound shootsoundeffect;
+	gFmodSound meteorhitsoundeffect;
 	float ssspeed, ssspeedx, ssspeedy;
 	float sssubspeed, sssubspeedx, sssubspeedy;
 	int gamestate;
