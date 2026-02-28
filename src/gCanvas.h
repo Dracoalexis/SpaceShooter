@@ -13,6 +13,8 @@
 #include "gImage.h"
 #include "MenuCanvas.h"
 #include "gFmodSound.h"
+#include "gSkybox.h"
+#include "gCamera.h"
 
 class gCanvas : public gBaseCanvas {
 public:
@@ -77,10 +79,11 @@ private:
 	};
 
 	gApp* root;
+	gCamera cam;
 	gImage spaceship;
 	gImage meteor1;
 	gImage meteor2;
-	gImage space;
+	gSkybox space;
 	gImage bulletImage;
 	gImage healthbar;
 	gImage healthbarborder;

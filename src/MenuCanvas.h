@@ -11,6 +11,7 @@
 #include "gBaseCanvas.h"
 #include "gApp.h"
 #include "gFmodSound.h"
+#include "gSkybox.h"
 
 class MenuCanvas: public gBaseCanvas {
 public:
@@ -36,7 +37,7 @@ public:
 	void showNotify();
 	void hideNotify();
 private:
-	gImage background;
+	gSkybox space;
 	gFont titlefont;
 	gFont startfont;
 	gFmodSound mainmenumusic;

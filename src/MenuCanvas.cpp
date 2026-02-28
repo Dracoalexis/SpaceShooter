@@ -16,9 +16,17 @@ MenuCanvas::~MenuCanvas() {
 }
 
 void MenuCanvas::setup() {
-	background.loadImage("SpaceShooter_Space.png");
+	space.dolly(-4.0f);
+	std::vector<std::string> spacetextures;
+	spacetextures.push_back("right.jpg");
+	spacetextures.push_back("left.jpg");
+	spacetextures.push_back("top.jpg");
+	spacetextures.push_back("bottom.jpg");
+	spacetextures.push_back("front.jpg");
+	spacetextures.push_back("back.jpg");
+	space.loadTextures(spacetextures);
 	titlefont.loadFont("SPACE.ttf", 40);
-	startfont.loadFont("space age.ttf", 18);
+	startfont.loadFont("space age.ttf", 12);
 	mainmenumusic.loadSound("main_menu.mp3");
 	tfx = (getWidth() - titlefont.getStringWidth("SPACE SHOOTER")) / 2;
 	tfy = getHeight() / 2;
@@ -28,10 +36,11 @@ void MenuCanvas::setup() {
 }
 
 void MenuCanvas::update() {
+	space.pan(-0.001f);
 }
 
 void MenuCanvas::draw() {
-	background.draw(0, 0);
+	space.draw();
 	setColor(150, 150, 150);
 	titlefont.drawText("SPACE SHOOTER", tfx, tfy);
 	setColor(255, 209, 5);

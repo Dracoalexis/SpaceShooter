@@ -16,15 +16,23 @@ gCanvas::~gCanvas() {
 }
 
 void gCanvas::setup() {
+	space.dolly(-4.0f);
 	gamestate = GAMESTATE_PLAY;
 	dialogueshown = false;
+	std::vector<std::string> spacetextures;
+	spacetextures.push_back("right.jpg");
+	spacetextures.push_back("left.jpg");
+	spacetextures.push_back("top.jpg");
+	spacetextures.push_back("bottom.jpg");
+	spacetextures.push_back("front.jpg");
+	spacetextures.push_back("back.jpg");
+	space.loadTextures(spacetextures);
 	meteorcountGUIfont.loadFont("space age.ttf", 18);
 	meteorscountfont.loadFont("dogicapixel.ttf", 12);
 	gameoverfont.loadFont("SPACE.ttf", 48);
 	mainmenubuttonfont.loadFont("space age.ttf", 18);
 	retrybuttonfont.loadFont("space age.ttf", 18);
 	scorefont.loadFont("space age.ttf", 18);
-	space.loadImage("SpaceShooter_Space.png");
 	spaceship.loadImage("SpaceShooter_SpaceShip1.png");
 	meteor1.loadImage("SpaceShooter_Meteor1.png");
 	meteor2.loadImage("SpaceShooter_Meteor2.png");
@@ -85,11 +93,14 @@ void gCanvas::setup() {
 
 void gCanvas::update() {
 	if(dialogueshown) return;
+	space.pan(-0.001f);
 	moveSpaceShip();
 	moveMeteors();
 	moveBullets();
 }
 void gCanvas::draw() {
+	cam.begin();
+	enableDepthTest();
 	drawSpace();
 	if(!dialogueshown) {
 		drawSpaceShip();
@@ -98,6 +109,8 @@ void gCanvas::draw() {
 	drawMeteors();
 	drawHealthBar();
 	drawDialogues();
+	disableDepthTest();
+	cam.end();
 }
 
 void gCanvas::generateMeteor() {
@@ -350,7 +363,7 @@ void gCanvas::moveBullets() {
 	}
 }
 void gCanvas::drawSpace() {
-	space.draw(0, 0);
+	space.draw();
 }
 void gCanvas::drawSpaceShip() {
 	spaceship.draw(ssx, ssy, ssw, ssh, ssw / 2, ssh / 2, ssangle);
